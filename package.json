@@ -1,0 +1,23 @@
+{
+  "name": "ninepatch-vue",
+  "version": "1.0.0",
+  "main": "dist/index.esm.js",
+  "author": "zengfukun <zengfukun@foxmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "local": "yarn build && sudo yarn link",
+    "publish": "yarn build && yarn login && yarn publish"
+  },
+  "dependencies": {
+    "ninepatch-core": "^1.0.3"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.31",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.6.14"
+  }
+}
