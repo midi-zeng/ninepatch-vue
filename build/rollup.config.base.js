@@ -15,7 +15,7 @@ import { writeFileSync, existsSync, mkdirSync } from 'fs' // 写文件
 
 const version = process.env.VERSION || require('../package.json').version
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.vue']
-const name = 'vue-ninepatch-vue'
+const name = 'ninepatch-vue'
 const banner =
   '/*!\n' +
   ` * ${name} v${version}\n` +
