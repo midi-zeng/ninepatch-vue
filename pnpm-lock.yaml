@@ -162,16 +162,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  ninepatch-core: link:../ninepatch-core
-
 importers:
 
   .:
     dependencies:
       ninepatch-core:
-        specifier: link:../ninepatch-core
-        version: link:../ninepatch-core
+        specifier: ^3.0.0
+        version: 3.0.0
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ^7.52.0
@@ -1337,6 +1334,9 @@ packages:
     resolution: {integrity: sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  ninepatch-core@3.0.0:
+    resolution: {integrity: sha512-mhA+vFtGDPCMGezb7jybC5k0fkj7kqgfszg/1FAOKi9yzRIBKbuoh022mE3rJVjG1qqtRZjMyog+DLqvJhEd2Q==}
 
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
@@ -2809,6 +2809,8 @@ snapshots:
   muggle-string@0.4.1: {}
 
   nanoid@3.3.20: {}
+
+  ninepatch-core@3.0.0: {}
 
   node-fetch-native@1.6.7: {}
 
