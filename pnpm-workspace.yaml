@@ -1,0 +1,5 @@
+# pnpm settings for this package.
+# ninepatch-core@^2.0.0 is unreleased; during local development resolve it from
+# the sibling repo, same as the previous `npm link` setup.
+overrides:
+  ninepatch-core: link:../ninepatch-core

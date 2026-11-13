@@ -28,13 +28,19 @@
   ],
   "license": "MIT",
   "scripts": {
+    "dev": "pnpm run demo:dev",
     "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "oxlint src test",
-    "typecheck": "vue-tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm run test"
+    "lint": "oxlint src test demo",
+    "typecheck": "vue-tsc --noEmit && vue-tsc --noEmit -p demo",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test",
+    "demo:dev": "vite --config vite.config.demo.ts",
+    "demo:build": "vite build --config vite.config.demo.ts",
+    "demo:preview": "vite preview --config vite.config.demo.ts",
+    "release": "pnpm run build && bumpp && pnpm publish"
   },
+  "packageManager": "pnpm@12.4.2",
   "dependencies": {
     "ninepatch-core": "^2.0.0"
   },
@@ -46,9 +52,11 @@
     "@types/node": "^26.6.6",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/test-utils": "^2.4.6",
+    "bumpp": "^12.3.0",
     "jsdom": "^31.0.0",
     "oxlint": "^1.93.0",
     "typescript": "^5.9.0",
+    "unocss": "^66.12.0",
     "vite": "^8.3.8",
     "vite-plugin-dts": "^5.1.2",
     "vitest": "^5.1.0",
