@@ -1,3 +1,2 @@
-import NinePatchVue from './index.vue'
-
-export default NinePatchVue
+export { default } from './NinePatch.vue'
+export type { NinePatchBoxEdges, NinePatchCustomOptions } from './types'
