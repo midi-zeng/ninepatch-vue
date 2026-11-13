@@ -8,7 +8,7 @@
 import { computed, ref, watch } from 'vue'
 import type { CSSProperties } from 'vue'
 import { NinePatchCore } from 'ninepatch-core'
-import type { NpTcChunkType } from 'ninepatch-core'
+import type { NinePatchData } from 'ninepatch-core'
 import type { NinePatchBoxEdges, NinePatchCustomOptions } from './types'
 
 const props = defineProps<{
@@ -18,7 +18,7 @@ const props = defineProps<{
   customOptions?: NinePatchCustomOptions
 }>()
 
-const chunk = ref<NpTcChunkType | null>(null)
+const renderData = ref<NinePatchData | null>(null)
 
 const DEFAULT_EDGES: Required<NinePatchBoxEdges> = { top: 0, right: 0, bottom: 0, left: 0 }
 
@@ -32,12 +32,12 @@ function edgesToCss(edges: Required<NinePatchBoxEdges>, unit: 'px' | ''): string
 }
 
 /**
- * Derive border-image-slice values from parsed chunk data.
+ * Derive border-image-slice values from parsed render data.
  *
  * The vertical insets come from yDivs and the horizontal ones from xDivs,
  * matching the CSS border-image-slice (top right bottom left) order.
  */
-function chunkToSlice(value: NpTcChunkType): Required<NinePatchBoxEdges> {
+function renderDataToSlice(value: NinePatchData): Required<NinePatchBoxEdges> {
   const width = value.width ?? 0
   const height = value.height ?? 0
   return {
@@ -53,7 +53,7 @@ watch(
   async ([src, customOptions], _previous, onCleanup) => {
     // Manual options win; drop any previously parsed data
     if (!src || customOptions) {
-      chunk.value = null
+      renderData.value = null
       return
     }
 
@@ -64,20 +64,20 @@ watch(
     })
 
     try {
-      const data = await new NinePatchCore(src).getChunkData()
-      if (!cancelled) chunk.value = data
+      const data = await new NinePatchCore(src).getRenderData()
+      if (!cancelled) renderData.value = data
     } catch {
-      if (!cancelled) chunk.value = null
+      if (!cancelled) renderData.value = null
     }
   },
   { immediate: true }
 )
 
-const padding = computed(() => resolveEdges(props.customOptions?.padding ?? chunk.value?.padding))
+const padding = computed(() => resolveEdges(props.customOptions?.padding ?? renderData.value?.padding))
 const slice = computed(() =>
-  resolveEdges(props.customOptions?.borderImageSlice ?? (chunk.value ? chunkToSlice(chunk.value) : undefined))
+  resolveEdges(props.customOptions?.borderImageSlice ?? (renderData.value ? renderDataToSlice(renderData.value) : undefined))
 )
-const clipPath = computed(() => props.customOptions?.clipPath ?? chunk.value?.clipPath ?? 0)
+const borderInset = computed(() => props.customOptions?.borderInset ?? renderData.value?.borderInset ?? 0)
 
 const containerStyle = computed<CSSProperties>(() => ({
   height: '100%',
@@ -89,6 +89,6 @@ const containerStyle = computed<CSSProperties>(() => ({
   paddingRight: `${padding.value.right}px`,
   paddingBottom: `${padding.value.bottom}px`,
   paddingLeft: `${padding.value.left}px`,
-  clipPath: clipPath.value ? `inset(${clipPath.value}px)` : undefined
+  clipPath: borderInset.value ? `inset(${borderInset.value}px)` : undefined
 }))
 </script>

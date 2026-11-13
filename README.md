@@ -43,7 +43,7 @@ import { NinePatch } from 'ninepatch-vue'
 | Prop | Type | Description |
 | --- | --- | --- |
 | `src` | `string` | Nine-patch image URL (raw or compiled). |
-| `customOptions` | `object` | Manual `padding` / `borderImageSlice` / `clipPath`; skips parsing. |
+| `customOptions` | `object` | Manual `padding` / `borderImageSlice` / `borderInset`; skips parsing. |
 
 Anything else (`class`, `style`, listeners) falls through to the wrapper div,
 and content goes into the default slot. The wrapper fills its parent height

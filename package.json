@@ -1,6 +1,6 @@
 {
   "name": "ninepatch-vue",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Vue component that renders Android nine-patch images",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -42,7 +42,7 @@
   },
   "packageManager": "pnpm@12.4.2",
   "dependencies": {
-    "ninepatch-core": "^2.0.0"
+    "ninepatch-core": "^3.0.0"
   },
   "peerDependencies": {
     "vue": "^3.2"

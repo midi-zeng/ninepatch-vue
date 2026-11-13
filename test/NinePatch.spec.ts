@@ -2,19 +2,19 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 import NinePatchVue from '../src/NinePatch.vue'
 
-const { getChunkData } = vi.hoisted(() => ({
+const { getRenderData } = vi.hoisted(() => ({
   // Never resolves by default so tests that parse must set an explicit result
-  getChunkData: vi.fn(() => new Promise(() => {}))
+  getRenderData: vi.fn(() => new Promise(() => {}))
 }))
 
 vi.mock('ninepatch-core', () => ({
   NinePatchCore: class {
     constructor(public src: string) {}
-    getChunkData = getChunkData
+    getRenderData = getRenderData
   }
 }))
 
-const GOLDEN_CHUNK = {
+const GOLDEN_RENDER_DATA = {
   padding: { left: 10, right: 20, top: 10, bottom: 20 },
   xDivs: { start: 14, stop: 29 },
   yDivs: { start: 14, stop: 29 },
@@ -41,7 +41,7 @@ describe('NinePatchVue', () => {
   })
 
   test('applies parsed chunk data as border-image styles', async () => {
-    getChunkData.mockResolvedValue(GOLDEN_CHUNK)
+    getRenderData.mockResolvedValue(GOLDEN_RENDER_DATA)
 
     const wrapper = mount(NinePatchVue, { props: { src: '/btn.png' } })
     await flush()
@@ -57,17 +57,17 @@ describe('NinePatchVue', () => {
   })
 
   test('custom options skip image parsing entirely', async () => {
-    getChunkData.mockClear()
+    getRenderData.mockClear()
 
     const wrapper = mount(NinePatchVue, {
       props: {
         src: '/btn.png',
-        customOptions: { padding: { top: 5 }, borderImageSlice: { left: 2, right: 3 }, clipPath: 1 }
+        customOptions: { padding: { top: 5 }, borderImageSlice: { left: 2, right: 3 }, borderInset: 1 }
       }
     })
     await flush()
 
-    expect(getChunkData).not.toHaveBeenCalled()
+    expect(getRenderData).not.toHaveBeenCalled()
     const style = styleOf(wrapper)
     expect(style.paddingTop).toBe('5px')
     expect(style.paddingRight).toBe('0px')
@@ -76,7 +76,7 @@ describe('NinePatchVue', () => {
   })
 
   test('custom options drop previously parsed chunk data', async () => {
-    getChunkData.mockResolvedValue(GOLDEN_CHUNK)
+    getRenderData.mockResolvedValue(GOLDEN_RENDER_DATA)
 
     const wrapper = mount(NinePatchVue, { props: { src: '/btn.png' } })
     await flush()
@@ -90,13 +90,13 @@ describe('NinePatchVue', () => {
 
   test('ignores stale responses after src changes', async () => {
     let resolveA: (value: unknown) => void = () => {}
-    getChunkData.mockImplementation(function (this: { src: string }) {
+    getRenderData.mockImplementation(function (this: { src: string }) {
       if (this.src === '/a.png') {
         return new Promise(resolve => {
           resolveA = resolve
         })
       }
-      return Promise.resolve({ ...GOLDEN_CHUNK, clipPath: 9 })
+      return Promise.resolve({ ...GOLDEN_RENDER_DATA, borderInset: 9 })
     })
 
     const wrapper = mount(NinePatchVue, { props: { src: '/a.png' } })
@@ -104,7 +104,7 @@ describe('NinePatchVue', () => {
     await flush()
     expect(styleOf(wrapper).clipPath).toBe('inset(9px)')
 
-    resolveA({ ...GOLDEN_CHUNK, clipPath: 1 })
+    resolveA({ ...GOLDEN_RENDER_DATA, borderInset: 1 })
     await flush()
 
     // the late response for /a.png must not overwrite /b.png
@@ -112,7 +112,7 @@ describe('NinePatchVue', () => {
   })
 
   test('parse failures render without border-image data', async () => {
-    getChunkData.mockRejectedValue(new Error('network down'))
+    getRenderData.mockRejectedValue(new Error('network down'))
 
     const wrapper = mount(NinePatchVue, { props: { src: '/broken.png' } })
     await flush()

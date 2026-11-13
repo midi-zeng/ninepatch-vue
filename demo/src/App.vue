@@ -12,7 +12,7 @@
 
     <div class="flex flex-wrap gap-8">
       <section>
-        <h2 class="mb-2 text-sm font-semibold text-slate-600">Raw source (guide border kept, clipPath 1)</h2>
+        <h2 class="mb-2 text-sm font-semibold text-slate-600">Raw source (guide border kept, borderInset 1)</h2>
         <div :style="{ width: `${width}px`, height: `${Math.round((width * 122) / 182)}px` }">
           <NinePatch :src="images.raw">
             <div class="flex h-full items-center justify-center text-sm">Raw nine-patch</div>
